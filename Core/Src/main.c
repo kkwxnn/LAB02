@@ -54,9 +54,14 @@ typedef struct
 
 adcVoltageMeter adcDMA[10];
 
-uint16_t adcSum;
-uint16_t adcAvg;
-uint16_t newvolt;
+uint16_t adcVsum;
+uint16_t adcVavg;
+uint16_t newVolt;
+uint16_t adcTempsum;
+uint16_t adcTempavg;
+uint16_t Vsense;
+uint16_t tempC;
+uint16_t tempK;
 
 /* USER CODE END PV */
 
@@ -118,15 +123,26 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  register int i;
+	  HAL_Delay(1000);
 	  for (i=0;i<10;i++){
-		  adcSum += adcDMA[i].volt;
+		  adcVsum += adcDMA[i].volt;
+		  adcTempsum += adcDMA[i].temp;
 	  }
-	  adcAvg = adcSum / 10;
-	  adcSum = 0;
+	  adcVavg = adcVsum/10;
+	  adcVsum = 0;
+	  adcTempavg = adcTempsum/10;
+	  adcTempsum = 0;
 
-	  //3061 bit = 5000 mV
-	  //1 bit = newvolt mV
-	  newvolt = 1.63345312*adcAvg;
+	  newVolt = adcVavg*1.6118;
+
+	  //TempC = ((Vsense-V25)/Avg_Slope)+25
+	  //V25 = sensor's voltage at 25C =0.76V
+
+	  //Sensor range [1.7,3.6]
+	  //ADC bit [0,4095]
+	  Vsense = (adcTempavg/2155.26)+1.7;
+	  tempC = ((Vsense-0.76)/2.5)+25;
+	  tempK = tempC + 273.15;
   }
   /* USER CODE END 3 */
 }
