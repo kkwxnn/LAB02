@@ -57,11 +57,11 @@ adcVoltageMeter adcDMA[10];
 uint16_t adcVsum;
 uint16_t adcVavg;
 uint16_t newVolt;
-uint16_t adcTempsum;
-uint16_t adcTempavg;
-uint16_t Vsense;
-uint16_t tempC;
-uint16_t tempK;
+float adcTempsum;
+float adcTempavg;
+float Vsense;
+float tempC;
+float tempK;
 
 /* USER CODE END PV */
 
